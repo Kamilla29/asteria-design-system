@@ -1,0 +1,171 @@
+func _show_settings() -> void:
+    current_view = "settings"
+    _clear_stage()
+    var panel := _center_overlay("Settings", "PAUSE MENU", Vector2(860, 520))
+    var content := panel.get_meta("content") as VBoxContainer
+    content.add_child(_setting_stepper_row("Interface scale", "Adjust HUD size", interface_scale_percent))
+    content.add_child(_setting_toggle_row("Controller vibration", _controller_vibration_subtitle(), controller_vibration_enabled, _toggle_controller_vibration))
+    content.add_child(_setting_toggle_row("High contrast indicators", "Additional status distinction", high_contrast_enabled, _toggle_high_contrast))
+
+    var critical := _panel_container("Game-only critical HUD state")
+    content.add_child(critical)
+    var critical_content := critical.get_meta("content") as VBoxContainer
+    critical_content.add_child(_muted("Color, pulse duration and pulse scale come from game.hud.critical.*", 12))
+    var bar := ProgressBar.new()
+    bar.value = 18
+    bar.max_value = 100
+    bar.show_percentage = false
+    bar.custom_minimum_size = Vector2(0, 18)
+    _style_progress(bar, true)
+    critical_content.add_child(bar)
+
+    var inspector := _muted("Runtime tokens: %s · %s · %s" % [
+        tokens.describe("semantic.color.text.primary"),
+        tokens.describe("game.focus.controller.ringColor"),
+        tokens.describe("game.hud.critical.pulseDuration")
+    ], 11)
+    inspector.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+    content.add_child(inspector)
+    var trace := _action_button("Design system trace", _show_system_trace, false)
+    content.add_child(trace)
+    var reset := _action_button("Reset demo state", _reset_demo_state, false)
+    content.add_child(reset)
+    var back := _action_button("Resume game", _show_gameplay, true)
+    content.add_child(back)
+    back.grab_focus()
+
+func _change_interface_scale(delta: int) -> void:
+    interface_scale_percent = clampi(interface_scale_percent + delta, 90, 110)
+    _show_settings()
+
+func _toggle_controller_vibration() -> void:
+    controller_vibration_enabled = not controller_vibration_enabled
+    if controller_vibration_enabled:
+        _rumble(0.13, 0.28, 0.62)
+    _show_settings()
+
+func _toggle_high_contrast() -> void:
+    high_contrast_enabled = not high_contrast_enabled
+    _show_settings()
+
+func _controller_vibration_subtitle() -> String:
+    if Input.get_connected_joypads().is_empty():
+        return "Gameplay feedback · no controller detected"
+    return "Gameplay feedback · controller detected"
+
+func _rumble(duration_seconds: float = 0.10, weak: float = 0.25, strong: float = 0.55) -> bool:
+    if not controller_vibration_enabled:
+        return false
+    var joypads := Input.get_connected_joypads()
+    if joypads.is_empty():
+        return false
+    Input.start_joy_vibration(int(joypads[0]), clampf(weak, 0.0, 1.0), clampf(strong, 0.0, 1.0), maxf(duration_seconds, 0.01))
+    return true
+
+func _apply_gameplay_interface_scale(top: Control, prompt: Control, hud: Control) -> void:
+    var factor := float(interface_scale_percent) / 100.0
+    var viewport_width := get_viewport_rect().size.x
+    top.pivot_offset = Vector2(top.size.x * 0.5, 0)
+    top.position.x = (viewport_width - top.size.x) * 0.5
+    top.scale = Vector2(factor, factor)
+    prompt.pivot_offset = prompt.size * 0.5
+    prompt.scale = Vector2(factor, factor)
+    hud.pivot_offset = Vector2(hud.size.x * 0.5, hud.size.y)
+    hud.position.x = (viewport_width - hud.size.x) * 0.5
+    hud.scale = Vector2(factor, factor)
+
+func _show_system_trace() -> void:
+    current_view = "trace"
+    _clear_stage()
+    var panel := _center_overlay("Design system trace", "CROSS-RUNTIME COMPARISON", Vector2(1010, 610))
+    var content := panel.get_meta("content") as VBoxContainer
+    content.add_child(_muted("The browser preview and the native Godot demo render the same design roles through different presentation technologies.", 12))
+
+    var cards := HBoxContainer.new()
+    cards.size_flags_vertical = Control.SIZE_EXPAND_FILL
+    cards.add_theme_constant_override("separation", 12)
+    content.add_child(cards)
+
+    var action_card := _panel_container("Action · shared contract")
+    action_card.custom_minimum_size = Vector2(300, 0)
+    cards.add_child(action_card)
+    var action_content := action_card.get_meta("content") as VBoxContainer
+    action_content.add_child(_muted("Shared roles remain stable; the game adapter adds controller focus and selected state.", 11))
+    var action_demo := Button.new()
+    action_demo.text = "Primary action"
+    action_demo.focus_mode = Control.FOCUS_ALL
+    _style_action_button(action_demo, true)
+    action_demo.pressed.connect(_trace_action_feedback.bind(action_demo))
+    action_content.add_child(action_demo)
+    action_content.add_child(_token_paths_label([
+        "component.action.background.default",
+        "component.action.radius",
+        "game.focus.controller.ringColor"
+    ]))
+
+    var slot_card := _panel_container("InventorySlot · game extension")
+    slot_card.custom_minimum_size = Vector2(300, 0)
+    cards.add_child(slot_card)
+    var slot_content := slot_card.get_meta("content") as VBoxContainer
+    slot_content.add_child(_muted("Game-only component that still reuses shared surface, border and spacing semantics.", 11))
+    var slots := HBoxContainer.new()
+    slots.add_theme_constant_override("separation", 8)
+    slot_content.add_child(slots)
+    var selected_slot := Button.new()
+    selected_slot.text = "1\nSolar Prism"
+    selected_slot.custom_minimum_size = Vector2(125, 92)
+    _style_inventory_slot(selected_slot, true)
+    slots.add_child(selected_slot)
+    var default_slot := Button.new()
+    default_slot.text = "2\nEcho Lens"
+    default_slot.custom_minimum_size = Vector2(125, 92)
+    _style_inventory_slot(default_slot, false)
+    slots.add_child(default_slot)
+    selected_slot.pressed.connect(_trace_select_slot.bind(selected_slot, default_slot, true))
+    default_slot.pressed.connect(_trace_select_slot.bind(selected_slot, default_slot, false))
+    slot_content.add_child(_token_paths_label([
+        "component.inventorySlot.background",
+        "component.inventorySlot.border.selected"
+    ]))
+
+    var hud_card := _panel_container("Critical HUD · platform override")
+    hud_card.custom_minimum_size = Vector2(300, 0)
+    cards.add_child(hud_card)
+    var hud_content := hud_card.get_meta("content") as VBoxContainer
+    hud_content.add_child(_muted("Danger meaning is shared; pulse timing and scale belong to the game adapter.", 11))
+    var critical := ProgressBar.new()
+    critical.value = 18
+    critical.max_value = 100
+    critical.show_percentage = true
+    critical.custom_minimum_size = Vector2(0, 20)
+    _style_progress(critical, true)
+    hud_content.add_child(critical)
+    critical_bar = critical
+    hud_content.add_child(_token_paths_label([
+        "game.hud.critical.color",
+        "game.hud.critical.pulseDuration",
+        "game.hud.critical.pulseScale"
+    ]))
+
+    content.add_child(_muted("Same generated game token output, different native presentation technology: HTML/CSS/JS in the browser and Godot Controls here.", 11))
+    var back := _action_button("Back to settings", _show_settings, false)
+    content.add_child(back)
+    action_demo.grab_focus()
+    await get_tree().process_frame
+    _start_critical_pulse()
+
+func _token_paths_label(paths: Array[String]) -> Label:
+    var lines := PackedStringArray()
+    for token_path in paths:
+        lines.append(token_path)
+    var label := _muted("\n".join(lines), 10)
+    label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+    return label
+
+func _trace_action_feedback(button: Button) -> void:
+    button.text = localizer.t("Action activated")
+
+func _trace_select_slot(selected_slot: Button, default_slot: Button, choose_first: bool) -> void:
+    _style_inventory_slot(selected_slot, choose_first)
+    _style_inventory_slot(default_slot, not choose_first)
+

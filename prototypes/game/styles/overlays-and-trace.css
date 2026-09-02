@@ -1,0 +1,358 @@
+.dialog p {
+  font-size:22px;
+  line-height:1.55;
+  margin:12px 0 22px
+}
+
+.dialog-actions {
+  display:flex;
+  gap:10px
+}
+
+.settings-window {
+  width:min(980px,94vw)
+}
+
+.settings-grid {
+  display:grid;
+  grid-template-columns:1fr .9fr;
+  gap:28px
+}
+
+.settings-list {
+  display:flex;
+  flex-direction:column
+}
+
+.setting {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 0;
+  border-bottom:1px solid var(--semantic-color-border-default)
+}
+
+.setting:first-child {
+  padding-top:0
+}
+
+.setting:last-child {
+  border-bottom:0
+}
+
+.setting small {
+  display:block;
+  color:var(--semantic-color-text-secondary);
+  margin-top:5px
+}
+
+.stepper {
+  display:flex;
+  align-items:center;
+  gap:8px
+}
+
+.stepper button {
+  width:32px;
+  height:32px;
+  border-radius:6px;
+  border:1px solid var(--semantic-color-border-default);
+  background:transparent;
+  color:var(--semantic-color-text-primary);
+  cursor:pointer
+}
+
+.toggle {
+  width:44px;
+  height:25px;
+  border:0;
+  border-radius:99px;
+  background:var(--semantic-color-border-default);
+  position:relative;
+  cursor:pointer
+}
+
+.toggle:after {
+  content:"";
+  position:absolute;
+  width:19px;
+  height:19px;
+  border-radius:50%;
+  background:var(--semantic-color-text-primary);
+  top:3px;
+  left:3px;
+  transition:left .15s
+}
+
+.toggle.on {
+  background:var(--semantic-color-action-primary-base)
+}
+
+.toggle.on:after {
+  left:22px
+}
+
+.adapter-note {
+  border-left:1px solid var(--semantic-color-border-default);
+  padding-left:28px
+}
+
+.critical-demo {
+  margin-top:28px;
+  border:1px solid var(--game-hud-critical-color);
+  padding:16px;
+  border-radius:var(--semantic-radius-control);
+  animation:pulse var(--game-hud-critical-pulseDuration) var(--game-hud-critical-pulseEasing) infinite alternate
+}
+
+.critical-demo span {
+  color:var(--game-hud-critical-color)
+}
+
+@keyframes pulse {
+  to {
+    transform:scale(var(--game-hud-critical-pulseScale));
+    box-shadow:0 0 24px color-mix(in srgb,var(--game-hud-critical-color) 30%,transparent)
+  }
+}
+
+body.high-contrast .hud-indicator,body.high-contrast .panel-lite {
+  border-width:2px;
+  border-color:#fff
+}
+
+body.high-contrast .progress {
+  outline:1px solid #fff
+}
+
+.screen-head,.hud-bottom,.location-card,.quest-hud {
+  transition:transform .15s
+}
+
+.status-success {
+  color:var(--semantic-color-status-success)
+}
+
+@media(max-width:900px) {
+  .input-hint {
+    display:none
+  }
+
+  .game-chrome {
+    padding:18px
+  }
+
+  .view {
+    padding-left:22px;
+    padding-right:22px
+  }
+
+  .title-screen {
+    grid-template-columns:1fr
+  }
+
+  .title-emblem {
+    display:none
+  }
+
+  .title-copy h1 {
+    font-size:58px
+  }
+
+  .hud-bottom {
+    grid-template-columns:1fr 1fr
+  }
+
+  .quick-nav {
+    grid-column:1/-1;
+    justify-content:flex-start
+  }
+
+  .inventory-layout,.quest-layout,.settings-grid {
+    grid-template-columns:1fr
+  }
+
+  .inventory-pane,.quest-list,.adapter-note {
+    border:0;
+    padding:0
+  }
+
+  .slot-grid {
+    grid-template-columns:repeat(2,1fr)
+  }
+
+  .dialog {
+    left:7%;
+    right:7%
+  }
+
+  .scene-character {
+    opacity:.34
+  }
+
+  .quest-hud {
+    top:auto;
+    bottom:210px
+  }
+
+  .location-card {
+    display:none
+  }
+}
+
+.chrome-actions {
+  display:flex;
+  align-items:center;
+  gap:18px
+}
+
+.locale-switch {
+  pointer-events:auto;
+  display:inline-flex;
+  gap:3px;
+  padding:3px;
+  border:1px solid var(--semantic-color-border-default);
+  border-radius:999px;
+  background:rgba(10,13,20,.58);
+  backdrop-filter:blur(8px)
+}
+
+.locale-switch button {
+  min-width:34px;
+  height:27px;
+  border:0;
+  border-radius:999px;
+  background:transparent;
+  color:var(--semantic-color-text-secondary);
+  font-size:10px;
+  font-weight:900;
+  cursor:pointer
+}
+
+.locale-switch button.active {
+  background:var(--game-focus-controller-ringColor);
+  color:#0e1117
+}
+
+@media(max-width:900px) {
+  .chrome-actions {
+    gap:8px
+  }
+}
+
+.trace-open {
+  margin-top:18px;
+  width:100%
+}
+
+.trace-window {
+  width:min(1030px,95vw);
+  max-height:86vh;
+  overflow:auto
+}
+
+.trace-intro,.trace-footer {
+  color:var(--semantic-color-text-secondary);
+  line-height:1.55
+}
+
+.trace-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  margin:18px 0
+}
+
+.trace-card {
+  border:1px solid var(--semantic-color-border-default);
+  background:color-mix(in srgb,var(--semantic-color-background-surface) 82%,transparent);
+  border-radius:var(--semantic-radius-panel);
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  min-height:330px
+}
+
+.trace-card h2,.trace-card p {
+  margin:0
+}
+
+.trace-card p {
+  color:var(--semantic-color-text-secondary);
+  font-size:13px;
+  line-height:1.45
+}
+
+.trace-card code {
+  display:block;
+  overflow-wrap:anywhere;
+  padding:6px 8px;
+  border-radius:6px;
+  background:rgba(5,7,12,.5);
+  color:var(--semantic-color-text-secondary);
+  font-size:10px
+}
+
+.trace-action {
+  width:100%
+}
+
+.trace-slots {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px
+}
+
+.trace-slots .inventory-slot {
+  min-height:100px
+}
+
+.trace-critical {
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  align-items:center;
+  padding:14px;
+  border:1px solid var(--game-hud-critical-color);
+  border-radius:var(--semantic-radius-control)
+}
+
+.trace-critical .progress {
+  min-width:0
+}
+
+.trace-critical strong {
+  color:var(--game-hud-critical-color)
+}
+
+@media(max-width:900px) {
+  .trace-grid {
+    grid-template-columns:1fr
+  }
+
+  .trace-card {
+    min-height:0
+  }
+}
+
+.interaction-prompt.complete {
+  border-color:var(--semantic-color-status-success,#54c88a);
+  box-shadow:0 0 18px color-mix(in srgb,var(--semantic-color-status-success,#54c88a) 22%,transparent)
+}
+
+.interaction-prompt.complete:disabled {
+  cursor:default;
+  pointer-events:none;
+  opacity:1;
+  color:var(--semantic-color-text-primary)
+}
+
+.interaction-prompt.complete:disabled kbd {
+  display:none
+}
+
+.reset-demo {
+  margin-top:10px;
+  width:100%
+}

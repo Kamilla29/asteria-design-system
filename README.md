@@ -2,7 +2,6 @@
 
 A reference implementation of a **shared design-token architecture for web and game user interfaces**. The project explores how one semantic design core can be transformed into platform-specific representations without forcing web and game UI to look or behave identically.
 
-![Asteria web companion portal](assets/screenshots/web-home.png)
 
 ## What this project demonstrates
 

@@ -1,0 +1,108 @@
+{
+  "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
+  "$description": "Platform-neutral semantic roles. Values are aliases to primitives.",
+  "semantic": {
+    "color": {
+      "$type": "color",
+      "background": {
+        "canvas": { "$value": "{primitive.color.neutral.0}" },
+        "surface": { "$value": "{primitive.color.neutral.50}" },
+        "elevated": { "$value": "{primitive.color.neutral.0}" }
+      },
+      "text": {
+        "primary": { "$value": "{primitive.color.neutral.950}" },
+        "secondary": { "$value": "{primitive.color.neutral.600}" },
+        "inverse": { "$value": "{primitive.color.neutral.0}" },
+        "disabled": { "$value": "{primitive.color.neutral.300}" }
+      },
+      "border": {
+        "default": { "$value": "{primitive.color.neutral.300}" },
+        "strong": { "$value": "{primitive.color.neutral.600}" },
+        "focus": { "$value": "{primitive.color.brand.500}" }
+      },
+      "action": {
+        "primary": {
+          "base": { "$value": "{primitive.color.brand.500}" },
+          "pressed": { "$value": "{primitive.color.brand.600}" },
+          "disabled": { "$value": "{primitive.color.neutral.300}" }
+        }
+      },
+      "status": {
+        "success": { "$value": "{primitive.color.green.500}" },
+        "warning": { "$value": "{primitive.color.amber.500}" },
+        "danger": { "$value": "{primitive.color.red.500}" },
+        "info": { "$value": "{primitive.color.blue.500}" }
+      },
+      "progress": {
+        "track": { "$value": "{primitive.color.neutral.100}" },
+        "value": { "$value": "{primitive.color.brand.500}" }
+      }
+    },
+    "spacing": {
+      "$type": "dimension",
+      "xs": { "$value": "{primitive.space.1}" },
+      "sm": { "$value": "{primitive.space.2}" },
+      "md": { "$value": "{primitive.space.4}" },
+      "lg": { "$value": "{primitive.space.5}" },
+      "xl": { "$value": "{primitive.space.6}" }
+    },
+    "radius": {
+      "$type": "dimension",
+      "control": { "$value": "{primitive.radius.md}" },
+      "panel": { "$value": "{primitive.radius.lg}" },
+      "pill": { "$value": "{primitive.radius.full}" }
+    },
+    "size": {
+      "$type": "dimension",
+      "control": { "$value": "{primitive.size.controlMd}" },
+      "icon": { "$value": "{primitive.size.iconMd}" }
+    },
+    "typography": {
+      "body": {
+        "$value": {
+          "fontFamily": "{primitive.font.family.sans}",
+          "fontSize": "{primitive.font.size.md}",
+          "fontWeight": "{primitive.font.weight.regular}",
+          "letterSpacing": { "value": 0, "unit": "px" },
+          "lineHeight": "{primitive.font.lineHeight.normal}"
+        },
+        "$type": "typography"
+      },
+      "label": {
+        "$value": {
+          "fontFamily": "{primitive.font.family.sans}",
+          "fontSize": "{primitive.font.size.sm}",
+          "fontWeight": "{primitive.font.weight.semibold}",
+          "letterSpacing": { "value": 0, "unit": "px" },
+          "lineHeight": "{primitive.font.lineHeight.normal}"
+        },
+        "$type": "typography"
+      },
+      "heading": {
+        "$value": {
+          "fontFamily": "{primitive.font.family.sans}",
+          "fontSize": "{primitive.font.size.xl}",
+          "fontWeight": "{primitive.font.weight.bold}",
+          "letterSpacing": { "value": 0, "unit": "px" },
+          "lineHeight": "{primitive.font.lineHeight.tight}"
+        },
+        "$type": "typography"
+      }
+    },
+    "motion": {
+      "duration": {
+        "$type": "duration",
+        "feedback": { "$value": "{primitive.motion.duration.fast}" },
+        "transition": { "$value": "{primitive.motion.duration.normal}" }
+      },
+      "easing": {
+        "$type": "cubicBezier",
+        "standard": { "$value": "{primitive.motion.easing.standard}" }
+      }
+    },
+    "opacity": {
+      "$type": "number",
+      "disabled": { "$value": "{primitive.opacity.disabled}" }
+    }
+  }
+}

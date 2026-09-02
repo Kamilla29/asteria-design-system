@@ -1,0 +1,56 @@
+{
+  "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
+  "$description": "Game adapter. It overrides selected semantic roles for a dark game context and adds game-only state/motion tokens.",
+  "semantic": {
+    "color": {
+      "background": {
+        "canvas": { "$value": "{primitive.color.neutral.950}", "$type": "color" },
+        "surface": { "$value": "{primitive.color.neutral.800}", "$type": "color" },
+        "elevated": { "$value": "{primitive.color.neutral.800}", "$type": "color" }
+      },
+      "text": {
+        "primary": { "$value": "{primitive.color.neutral.0}", "$type": "color" },
+        "secondary": { "$value": "{primitive.color.neutral.300}", "$type": "color" },
+        "inverse": { "$value": "{primitive.color.neutral.950}", "$type": "color" }
+      },
+      "border": { "default": { "$value": "{primitive.color.neutral.600}", "$type": "color" } },
+      "progress": { "track": { "$value": "{primitive.color.neutral.600}", "$type": "color" } }
+    }
+  },
+  "game": {
+    "focus": {
+      "controller": {
+        "ringColor": { "$value": "{primitive.color.brand.400}", "$type": "color" },
+        "ringWidth": { "$value": { "value": 3, "unit": "px" }, "$type": "dimension" }
+      }
+    },
+    "hud": {
+      "critical": {
+        "color": { "$value": "{semantic.color.status.danger}", "$type": "color" },
+        "pulseDuration": { "$value": "{primitive.motion.duration.slow}", "$type": "duration" },
+        "pulseEasing": { "$value": "{primitive.motion.easing.emphasized}", "$type": "cubicBezier" },
+        "pulseScale": { "$value": 1.06, "$type": "number" }
+      }
+    },
+    "cooldown": { "overlayOpacity": { "$value": "{primitive.opacity.overlay}", "$type": "number" } },
+    "state": { "lockedOpacity": { "$value": "{primitive.opacity.disabled}", "$type": "number" } }
+  },
+  "component": {
+    "action": { "background": { "selected": { "$value": "{primitive.color.brand.400}", "$type": "color" } } },
+    "inventorySlot": {
+      "background": { "$value": "{semantic.color.background.surface}", "$type": "color" },
+      "border": {
+        "default": { "$value": "{semantic.color.border.default}", "$type": "color" },
+        "selected": { "$value": "{game.focus.controller.ringColor}", "$type": "color" }
+      },
+      "radius": { "$value": "{semantic.radius.control}", "$type": "dimension" },
+      "size": { "$value": { "value": 56, "unit": "px" }, "$type": "dimension" },
+      "gap": { "$value": "{semantic.spacing.sm}", "$type": "dimension" }
+    },
+    "hudIndicator": {
+      "text": { "$value": "{semantic.color.text.primary}", "$type": "color" },
+      "danger": { "$value": "{game.hud.critical.color}", "$type": "color" },
+      "gap": { "$value": "{semantic.spacing.xs}", "$type": "dimension" }
+    }
+  }
+}

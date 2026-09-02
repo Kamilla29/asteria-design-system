@@ -1,0 +1,8 @@
+.DS_Store
+__MACOSX/
+**/.godot/
+node_modules/
+dist/
+godot-demo/design-system/
+godot-demo/locales/
+godot-demo/main.gd

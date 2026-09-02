@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Asteria Portal — Web model case</title>
+<link href="../../dist/web/tokens.css" rel="stylesheet"/>
+<link href="styles.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="app-shell">
+<header class="topbar">
+<a aria-label="Asteria Portal home" class="brand" href="?view=home">
+<span aria-hidden="true" class="brand-mark"></span>
+<span>ASTERIA</span>
+</a>
+<nav aria-label="Primary" class="topnav">
+<button class="nav-item" data-view="home">Home</button>
+<button class="nav-item" data-view="catalog">Compendium</button>
+<button class="nav-item" data-view="detail">Character</button>
+<button class="nav-item" data-view="register">Register</button>
+</nav>
+<div aria-label="Language" class="locale-switch"><button aria-pressed="false" data-locale="en" type="button">EN</button><button aria-pressed="false" data-locale="cs" type="button">CZ</button></div><button class="action action-secondary">Sign in</button>
+</header>
+<main class="view" id="view-home">
+<section class="hero panel">
+<div class="hero-copy">
+<span class="eyebrow">COMPANION PORTAL</span>
+<h1>One world. Your progress, stories and discoveries.</h1>
+<p>Explore the Asteria compendium, follow seasonal updates and manage your player profile from the web.</p>
+<div class="button-row">
+<button class="action">Open compendium</button>
+<button class="action action-secondary">Latest update</button>
+</div>
+</div>
+<div aria-hidden="true" class="hero-art">
+<div class="planet planet-large"></div><div class="planet planet-small"></div><div class="orbit"></div>
+</div>
+</section>
+<section class="section-head"><div><span class="eyebrow">LIVE DATA</span><h2>World status</h2></div><span class="status-badge status-success">Servers online</span></section>
+<section class="card-grid">
+<article class="panel stat-card"><span class="muted">Season progress</span><strong>68%</strong><div class="progress"><span style="width:68%"></span></div></article>
+<article class="panel stat-card"><span class="muted">Active expedition</span><strong>Glass Meridian</strong><span class="status-badge status-info">Chapter 4</span></article>
+<article class="panel stat-card"><span class="muted">Weekly objective</span><strong>3 / 5</strong><div class="progress"><span style="width:60%"></span></div></article>
+</section>
+</main>
+<main class="view" hidden="" id="view-catalog">
+<section class="page-heading"><div><span class="eyebrow">COMPENDIUM</span><h1>Discover Asteria</h1><p>Reusable cards, statuses and navigation use the shared component contracts.</p></div><label class="search"><span>Search</span><input class="input" placeholder="Characters, regions, relics…"/></label></section>
+<section class="filter-row"><button class="filter active">All</button><button class="filter">Characters</button><button class="filter">Regions</button><button class="filter">Relics</button></section>
+<section class="catalog-grid">
+<article class="panel catalog-card"><div class="card-art art-1"></div><div class="card-body"><span class="status-badge status-info">Character</span><h3>Lyra Venn</h3><p class="muted">Navigator of the northern observatory.</p><a class="link" href="?view=detail">View profile →</a></div></article>
+<article class="panel catalog-card"><div class="card-art art-2"></div><div class="card-body"><span class="status-badge status-success">Region</span><h3>Verdant Reach</h3><p class="muted">Bioluminescent valleys beyond the eastern gate.</p><a class="link" href="#">Explore →</a></div></article>
+<article class="panel catalog-card"><div class="card-art art-3"></div><div class="card-body"><span class="status-badge status-warning">Relic</span><h3>Solar Prism</h3><p class="muted">A rare focus used by starbound artisans.</p><a class="link" href="#">Inspect →</a></div></article>
+</section>
+</main>
+<main class="view" hidden="" id="view-detail">
+<section class="detail-layout">
+<div class="portrait panel"><div class="portrait-silhouette"></div><span class="status-badge status-info">Navigator · Rank IV</span></div>
+<div class="detail-content">
+<span class="eyebrow">CHARACTER PROFILE</span><h1>Lyra Venn</h1><p class="lead">An observatory navigator who charts unstable routes between Asteria's outer regions.</p>
+<div class="meta-grid"><div class="panel"><span class="muted">Affinity</span><strong>Celestial</strong></div><div class="panel"><span class="muted">Role</span><strong>Support</strong></div></div>
+<div class="panel"><div class="section-head compact"><h3>Research mastery</h3><strong>74%</strong></div><div class="progress"><span style="width:74%"></span></div></div>
+<div class="button-row"><button class="action">Add to roster</button><button class="action action-secondary">Share profile</button></div>
+</div>
+</section>
+</main>
+<main class="view" hidden="" id="view-register">
+<section class="form-layout">
+<div class="form-intro"><span class="eyebrow">PLAYER ACCOUNT</span><h1>Join the expedition.</h1><p>Create an account to sync your profile and companion portal settings.</p><div class="principle panel"><strong>Web-specific layer</strong><p class="muted">Form controls, validation and focus-visible behavior are intentionally defined only by the web adapter.</p></div></div>
+<form class="panel form-card">
+<label>Display name<input class="input" value="Asteria Explorer"/></label>
+<label>Email<input class="input" placeholder="name@example.com" type="email"/></label>
+<label>Password<input class="input" type="password" value="password123"/></label>
+<label class="check"><input checked="" type="checkbox"/> <span>I agree to the portal terms.</span></label>
+<button class="action full" type="button">Create account</button>
+<p class="form-note">Already registered? <a class="link" href="#">Sign in</a></p>
+</form>
+</section>
+</main>
+</div>
+<script src="../../shared/i18n.js"></script><script src="app.js"></script>
+</body>
+</html>

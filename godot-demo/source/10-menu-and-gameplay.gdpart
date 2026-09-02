@@ -1,0 +1,191 @@
+func _show_menu() -> void:
+    current_view = "menu"
+    _clear_stage()
+
+    var margin := _screen_margin(70, 72, 70, 58)
+    stage.add_child(margin)
+    var row := HBoxContainer.new()
+    row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    row.size_flags_vertical = Control.SIZE_EXPAND_FILL
+    row.add_theme_constant_override("separation", 54)
+    margin.add_child(row)
+
+    var left := VBoxContainer.new()
+    left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    left.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+    left.add_theme_constant_override("separation", 12)
+    row.add_child(left)
+
+    left.add_child(_kicker("CONTINUE EXPEDITION"))
+    var title := Label.new()
+    title.text = "Glass Meridian"
+    title.add_theme_color_override("font_color", _color("semantic.color.text.primary", Color.WHITE))
+    title.add_theme_font_size_override("font_size", 58)
+    left.add_child(title)
+    left.add_child(_muted("Cycle 41 · Observatory Gate", 17))
+
+    var menu := VBoxContainer.new()
+    menu.custom_minimum_size = Vector2(340, 0)
+    menu.add_theme_constant_override("separation", 10)
+    left.add_child(menu)
+    var continue_button := _action_button("Continue", _show_gameplay, true)
+    menu.add_child(continue_button)
+    menu.add_child(_action_button("Load profile", _show_load, false))
+    menu.add_child(_action_button("New expedition", _show_new_expedition, false))
+    menu.add_child(_action_button("Settings", _show_settings, false))
+
+    left.add_child(_muted("Shared Action contract; game adapter adds controller focus and selected state.", 12))
+
+    var visual := _panel_container("ASTERIA ARCHIVE NODE")
+    visual.custom_minimum_size = Vector2(420, 430)
+    visual.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+    row.add_child(visual)
+    var content := visual.get_meta("content") as VBoxContainer
+    var spacer := Control.new()
+    spacer.custom_minimum_size = Vector2(0, 80)
+    content.add_child(spacer)
+    var orb := Label.new()
+    orb.text = "◯  ◌  ✦  ◌  ◯"
+    orb.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    orb.add_theme_color_override("font_color", _color("game.focus.controller.ringColor", Color("7b85ff")))
+    orb.add_theme_font_size_override("font_size", 42)
+    content.add_child(orb)
+    content.add_child(_centered_muted("NORTHERN OBSERVATORY\nRoute stability 72%\nSignal lock acquired", 14))
+    content.add_child(_token_status_label())
+
+    continue_button.grab_focus()
+
+func _show_gameplay() -> void:
+    current_view = "gameplay"
+    _clear_stage()
+
+    var top := HBoxContainer.new()
+    top.position = Vector2(42, 36)
+    top.size = Vector2(1015, 88)
+    top.add_theme_constant_override("separation", 24)
+    stage.add_child(top)
+
+    var location := _panel_container("NORTHERN OBSERVATORY")
+    location.custom_minimum_size = Vector2(330, 0)
+    top.add_child(location)
+    var location_content := location.get_meta("content") as VBoxContainer
+    location_content.add_child(_muted("Gate approach · " + ("Signal stability 100%" if beacon_calibrated else "Signal stability 72%"), 12))
+
+    var gap := Control.new()
+    gap.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    top.add_child(gap)
+
+    var objective := _panel_container("TRACKED OBJECTIVE")
+    objective.custom_minimum_size = Vector2(340, 0)
+    top.add_child(objective)
+    var objective_content := objective.get_meta("content") as VBoxContainer
+    var objective_name := Label.new()
+    objective_name.text = tracked_quest
+    objective_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+    objective_name.add_theme_color_override("font_color", _color("semantic.color.text.primary", Color.WHITE))
+    objective_content.add_child(objective_name)
+    var objective_detail := _muted(tracked_detail, 12)
+    objective_detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+    objective_content.add_child(objective_detail)
+
+    var world_label := Label.new()
+    world_label.text = "✦\n\n       OBSERVATORY GATE\n\n                 △"
+    world_label.position = Vector2(345, 200)
+    world_label.size = Vector2(420, 220)
+    world_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    world_label.add_theme_color_override("font_color", Color(0.48, 0.52, 1.0, 0.42))
+    world_label.add_theme_font_size_override("font_size", 28)
+    stage.add_child(world_label)
+
+    var prompt := Button.new()
+    prompt.text = "✓ Beacon calibrated" if beacon_calibrated else "[ E ]  Calibrate navigation beacon"
+    prompt.position = Vector2(405, 430)
+    prompt.size = Vector2(310, 42)
+    prompt.focus_mode = Control.FOCUS_NONE if beacon_calibrated else Control.FOCUS_ALL
+    var prompt_border := Color.WHITE if high_contrast_enabled else (_color("semantic.color.status.success", Color("54c88a")) if beacon_calibrated else _color("semantic.color.border.default", Color("4b5565")))
+    prompt.add_theme_stylebox_override("normal", _box(Color(0.05,0.07,0.10,0.76), prompt_border, 18, 2 if high_contrast_enabled else 1))
+    prompt.add_theme_stylebox_override("disabled", _box(Color(0.05,0.07,0.10,0.76), _color("semantic.color.status.success", Color("54c88a")), 18, 1))
+    prompt.add_theme_color_override("font_disabled_color", _color("semantic.color.text.primary", Color.WHITE))
+    prompt.disabled = beacon_calibrated
+    prompt.add_theme_stylebox_override("hover", _box(Color(0.08,0.10,0.16,0.90), _color("game.focus.controller.ringColor", Color("7b85ff")), 18, 1))
+    prompt.add_theme_stylebox_override("focus", _box(Color(0.05,0.07,0.10,0.76), _color("game.focus.controller.ringColor", Color("7b85ff")), 18, int(_number("game.focus.controller.ringWidth", 3))))
+    prompt.add_theme_color_override("font_color", _color("semantic.color.text.primary", Color.WHITE))
+    if not beacon_calibrated:
+        prompt.pressed.connect(_calibrate_beacon)
+    stage.add_child(prompt)
+
+    var hud := HBoxContainer.new()
+    hud.position = Vector2(38, 550)
+    hud.size = Vector2(1025, 110)
+    hud.add_theme_constant_override("separation", 12)
+    stage.add_child(hud)
+    hud.add_child(_hud_panel("HP", 82, false))
+    hud.add_child(_hud_panel("ENERGY", 18, true))
+
+    var nav := HBoxContainer.new()
+    nav.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    nav.alignment = BoxContainer.ALIGNMENT_END
+    nav.add_theme_constant_override("separation", 8)
+    hud.add_child(nav)
+    var inventory := _small_nav_button("I  Inventory", _show_inventory)
+    nav.add_child(inventory)
+    nav.add_child(_small_nav_button("Q  Quest Log", _show_quests))
+    nav.add_child(_small_nav_button("F  Talk", _show_dialog))
+    nav.add_child(_small_nav_button("Esc  Pause", _show_settings))
+    inventory.grab_focus()
+
+    await get_tree().process_frame
+    _apply_gameplay_interface_scale(top, prompt, hud)
+    _start_critical_pulse()
+
+func _calibrate_beacon() -> void:
+    if beacon_calibrated:
+        return
+    beacon_calibrated = true
+    tracked_quest = "Observatory Core"
+    tracked_detail = "Route stabilized · proceed to core"
+    _rumble(0.14, 0.32, 0.72)
+    _show_gameplay()
+
+func _reset_demo_state() -> void:
+    beacon_calibrated = false
+    tracked_quest = "Observatory Gate"
+    tracked_detail = "340 m · Reach the core"
+    equipped_item = ""
+    selected_item = 0
+    interface_scale_percent = 100
+    controller_vibration_enabled = true
+    high_contrast_enabled = false
+    _show_settings()
+
+func _show_load() -> void:
+    current_view = "load"
+    _clear_stage()
+    var panel := _center_overlay("Load expedition", "PROFILE ARCHIVE", Vector2(720, 460))
+    var content := panel.get_meta("content") as VBoxContainer
+    var first := _save_slot("Glass Meridian", "Cycle 41 · Observatory Gate", "12h 48m", _show_gameplay)
+    content.add_child(first)
+    content.add_child(_save_slot("Verdant Reach", "Cycle 27 · Eastern Gate", "7h 16m", _show_gameplay))
+    content.add_child(_save_slot("New archive slot", "No expedition data", "—", _show_new_expedition))
+    content.add_child(_action_button("Back", _show_menu, false))
+    first.grab_focus()
+
+func _show_new_expedition() -> void:
+    current_view = "new"
+    _clear_stage()
+    var panel := _center_overlay("Start a new cycle?", "NEW EXPEDITION", Vector2(640, 360))
+    var content := panel.get_meta("content") as VBoxContainer
+    content.add_child(_section_text("A new model-case state will be created. Existing profile data is not modified in this demonstration."))
+    var row := HBoxContainer.new()
+    row.add_theme_constant_override("separation", 10)
+    content.add_child(row)
+    var start := _action_button("Begin expedition", _begin_new_expedition, true)
+    row.add_child(start)
+    row.add_child(_action_button("Cancel", _show_menu, false))
+    start.grab_focus()
+
+func _begin_new_expedition() -> void:
+    tracked_quest = "First Calibration"
+    tracked_detail = "120 m · Reach the first beacon"
+    _show_gameplay()
+

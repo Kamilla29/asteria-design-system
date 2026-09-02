@@ -1,0 +1,141 @@
+extends Control
+
+const Localization = preload("res://localization.gd")
+
+var tokens := DesignTokens.new()
+var localizer = Localization.new()
+var stage: Control
+var current_view := "menu"
+var tracked_quest := "Observatory Gate"
+var tracked_detail := "340 m · Reach the core"
+var equipped_item := ""
+var selected_item := 0
+var beacon_calibrated: bool = false
+var interface_scale_percent: int = 100
+var controller_vibration_enabled: bool = true
+var high_contrast_enabled: bool = false
+var critical_bar: ProgressBar
+
+var inventory_items := [
+    {"name":"Solar Prism", "rarity":"RARE RELIC", "description":"Amplifies celestial resonance after a perfect evade.", "stat":"Resonance +18% · Cooldown 12s"},
+    {"name":"Echo Lens", "rarity":"UNCOMMON RELIC", "description":"Reveals unstable signal traces near archive fragments.", "stat":"Scan range +24% · Charge 8s"},
+    {"name":"Void Key", "rarity":"RARE RELIC", "description":"Temporarily stabilizes sealed routes between observatory nodes.", "stat":"Stability +31% · Charges 3"},
+    {"name":"Star Thread", "rarity":"COMMON RELIC", "description":"Links navigation markers and shortens return-route recalculation.", "stat":"Route speed +9% · Duration 45s"},
+    {"name":"North Sigil", "rarity":"EPIC RELIC", "description":"Marks a safe vector through northern magnetic storms.", "stat":"Protection +26% · Cooldown 20s"}
+]
+
+var quest_data := {
+    "The Glass Meridian": {"detail":"Reach the northern observatory", "progress":72, "hud":"Observatory Gate", "distance":"340 m · Reach the core"},
+    "Lost Signals": {"detail":"Recover 3 archive fragments", "progress":33, "hud":"Lost Signals", "distance":"2 fragments remaining"},
+    "Prismatic Bloom": {"detail":"Speak with Iona", "progress":10, "hud":"Prismatic Bloom", "distance":"Speak with Iona"}
+}
+
+func _ready() -> void:
+    _register_focus_navigation()
+    if not localizer.load_locales():
+        push_warning("Localization files could not be loaded; falling back to English.")
+    if not tokens.load_from_file():
+        _build_error_state()
+        return
+    _build_background()
+    stage = Control.new()
+    stage.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+    add_child(stage)
+    _build_language_switch()
+    _show_menu()
+
+func _input(event: InputEvent) -> void:
+    if not (event is InputEventKey):
+        return
+
+    var key_event := event as InputEventKey
+    if not key_event.pressed or key_event.echo:
+        return
+
+    var key := key_event.physical_keycode
+    var handled := false
+
+    if key == KEY_I:
+        handled = _toggle_game_view("inventory")
+    elif key == KEY_Q:
+        handled = _toggle_game_view("quests")
+    elif key == KEY_F:
+        handled = _toggle_game_view("dialog")
+    elif key == KEY_E and current_view == "gameplay" and not beacon_calibrated:
+        _calibrate_beacon()
+        handled = true
+    elif key == KEY_ESCAPE:
+        handled = _handle_game_back()
+
+    if handled:
+        get_viewport().set_input_as_handled()
+
+func _toggle_game_view(target: String) -> bool:
+    if current_view == "menu" or current_view == "load" or current_view == "new":
+        return false
+
+    if current_view == target:
+        _show_gameplay()
+        return true
+
+    match target:
+        "inventory":
+            _show_inventory()
+        "quests":
+            _show_quests()
+        "dialog":
+            _show_dialog()
+        _:
+            return false
+    return true
+
+func _handle_game_back() -> bool:
+    if current_view == "menu":
+        return false
+    if current_view == "gameplay":
+        _show_settings()
+    else:
+        _show_gameplay()
+    return true
+
+func _register_focus_navigation() -> void:
+    _add_key_to_action("ui_up", KEY_W)
+    _add_key_to_action("ui_down", KEY_S)
+    _add_key_to_action("ui_left", KEY_A)
+    _add_key_to_action("ui_right", KEY_D)
+    _add_key_to_action("ui_accept", KEY_ENTER)
+    _add_key_to_action("ui_accept", KEY_SPACE)
+
+func _add_key_to_action(action_name: StringName, keycode: int) -> void:
+    if not InputMap.has_action(action_name):
+        InputMap.add_action(action_name)
+    var key_event := InputEventKey.new()
+    key_event.physical_keycode = keycode
+    if not InputMap.action_has_event(action_name, key_event):
+        InputMap.action_add_event(action_name, key_event)
+
+func _build_error_state() -> void:
+    var label := Label.new()
+    label.text = "Token file could not be loaded. Expected res://design-system/tokens.json"
+    label.position = Vector2(32, 32)
+    label.add_theme_font_size_override("font_size", 18)
+    add_child(label)
+
+func _build_background() -> void:
+    var background := ColorRect.new()
+    background.color = _color("semantic.color.background.canvas", Color("0e1117"))
+    background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+    background.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    add_child(background)
+
+    var atmosphere := ColorRect.new()
+    atmosphere.color = Color(0.07, 0.09, 0.17, 0.72)
+    atmosphere.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+    atmosphere.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    add_child(atmosphere)
+
+func _clear_stage() -> void:
+    for child in stage.get_children():
+        child.queue_free()
+    call_deferred("_localize_stage")
+

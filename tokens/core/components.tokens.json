@@ -1,0 +1,62 @@
+{
+  "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
+  "$description": "Shared component contracts. They describe semantic roles, not a shared implementation.",
+  "component": {
+    "action": {
+      "background": {
+        "$type": "color",
+        "default": { "$value": "{semantic.color.action.primary.base}" },
+        "pressed": { "$value": "{semantic.color.action.primary.pressed}" },
+        "disabled": { "$value": "{semantic.color.action.primary.disabled}" }
+      },
+      "text": {
+        "$type": "color",
+        "default": { "$value": "{semantic.color.text.inverse}" },
+        "disabled": { "$value": "{semantic.color.text.secondary}" }
+      },
+      "height": { "$value": "{semantic.size.control}", "$type": "dimension" },
+      "radius": { "$value": "{semantic.radius.control}", "$type": "dimension" },
+      "paddingInline": { "$value": "{semantic.spacing.md}", "$type": "dimension" }
+    },
+    "panel": {
+      "background": { "$value": "{semantic.color.background.surface}", "$type": "color" },
+      "border": { "$value": "{semantic.color.border.default}", "$type": "color" },
+      "radius": { "$value": "{semantic.radius.panel}", "$type": "dimension" },
+      "padding": { "$value": "{semantic.spacing.lg}", "$type": "dimension" }
+    },
+    "navigationItem": {
+      "text": {
+        "$type": "color",
+        "default": { "$value": "{semantic.color.text.secondary}" },
+        "active": { "$value": "{semantic.color.text.primary}" }
+      },
+      "indicator": { "$value": "{semantic.color.action.primary.base}", "$type": "color" },
+      "gap": { "$value": "{semantic.spacing.sm}", "$type": "dimension" }
+    },
+    "statusBadge": {
+      "success": { "$value": "{semantic.color.status.success}", "$type": "color" },
+      "warning": { "$value": "{semantic.color.status.warning}", "$type": "color" },
+      "danger": { "$value": "{semantic.color.status.danger}", "$type": "color" },
+      "info": { "$value": "{semantic.color.status.info}", "$type": "color" },
+      "radius": { "$value": "{semantic.radius.pill}", "$type": "dimension" }
+    },
+    "progress": {
+      "track": { "$value": "{semantic.color.progress.track}", "$type": "color" },
+      "value": { "$value": "{semantic.color.progress.value}", "$type": "color" },
+      "danger": { "$value": "{semantic.color.status.danger}", "$type": "color" },
+      "radius": { "$value": "{semantic.radius.pill}", "$type": "dimension" }
+    },
+    "dialog": {
+      "background": { "$value": "{semantic.color.background.elevated}", "$type": "color" },
+      "text": { "$value": "{semantic.color.text.primary}", "$type": "color" },
+      "radius": { "$value": "{semantic.radius.panel}", "$type": "dimension" },
+      "padding": { "$value": "{semantic.spacing.lg}", "$type": "dimension" }
+    },
+    "tooltip": {
+      "background": { "$value": "{semantic.color.text.primary}", "$type": "color" },
+      "text": { "$value": "{semantic.color.text.inverse}", "$type": "color" },
+      "radius": { "$value": "{primitive.radius.sm}", "$type": "dimension" },
+      "padding": { "$value": "{semantic.spacing.sm}", "$type": "dimension" }
+    }
+  }
+}

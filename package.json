@@ -1,0 +1,25 @@
+{
+  "name": "asteria-cross-platform-design-system",
+  "private": true,
+  "type": "module",
+  "description": "Cross-platform web/game design-system reference implementation based on shared semantic design tokens and platform adapters.",
+  "scripts": {
+    "build": "node scripts/build-tokens.mjs",
+    "validate": "node scripts/validate-tokens.mjs",
+    "metrics": "node scripts/metrics.mjs",
+    "audit:model-cases": "node scripts/audit-model-cases.mjs",
+    "validate:architecture": "node scripts/validate-architecture.mjs",
+    "demo": "node scripts/serve.mjs",
+    "check": "npm run validate && npm run build && npm run godot:sync && npm run godot:assemble && npm run check:locales && npm run audit:model-cases && npm run check:game-prototype && npm run validate:architecture && npm run godot:check && npm run metrics",
+    "godot:sync": "node scripts/sync-godot-tokens.mjs",
+    "godot:check": "node scripts/check-godot-demo.mjs",
+    "godot:prepare": "npm run build && npm run godot:sync && npm run godot:assemble && npm run godot:check",
+    "check:game-prototype": "node scripts/check-game-prototype.mjs",
+    "check:locales": "node scripts/check-locales.mjs",
+    "godot:assemble": "node scripts/assemble-godot-main.mjs"
+  },
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=20"
+  }
+}

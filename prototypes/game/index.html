@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Asteria Game UI — Interactive game model case</title>
+<link href="../../dist/game/tokens.css" rel="stylesheet"/>
+<link href="styles/base.css" rel="stylesheet"/>
+<link href="styles/interfaces.css" rel="stylesheet"/>
+<link href="styles/overlays-and-trace.css" rel="stylesheet"/>
+</head>
+<body>
+<div id="loading">Loading generated game tokens…</div>
+<div hidden="" id="game">
+<div class="game-shell">
+<div aria-hidden="true" class="world-scene">
+<div class="sky-glow"></div>
+<div class="moon"></div>
+<div class="ridge ridge-back"></div>
+<div class="ridge ridge-front"></div>
+<div class="observatory"><span></span></div>
+<div class="world-particles"><i></i><i></i><i></i><i></i><i></i></div>
+</div>
+<header class="game-chrome">
+<div class="game-brand"><span class="brand-orb"></span><div><small>ARCHIVE NODE</small><strong>ASTERIA</strong></div></div>
+<div class="chrome-actions"><div class="input-hint"><kbd>Esc</kbd> Back · <kbd>I</kbd> Inventory · <kbd>Q</kbd> Quest Log</div><div aria-label="Language" class="locale-switch"><button aria-pressed="false" data-locale="en" type="button">EN</button><button aria-pressed="false" data-locale="cs" type="button">CZ</button></div></div>
+</header>
+<main class="game-stage">
+<section class="view title-screen" id="view-menu">
+<div class="title-copy">
+<span class="kicker">CONTINUE EXPEDITION</span>
+<h1>Glass Meridian</h1>
+<p>Cycle 41 · Observatory Gate</p>
+<div class="menu-actions" role="menu">
+<button class="action selected" data-view="gameplay">Continue</button>
+<button class="action ghost" data-view="load">Load profile</button>
+<button class="action ghost" data-view="new">New expedition</button>
+<button class="action ghost" data-view="settings">Settings</button>
+</div>
+<small class="title-note">This screen uses the shared Action contract, translated by the game adapter for controller-style selection.</small>
+</div>
+<div aria-hidden="true" class="title-emblem"><div class="orbit o1"></div><div class="orbit o2"></div><div class="core"></div></div>
+</section>
+<section class="view gameplay-view" hidden="" id="view-gameplay">
+<div class="location-card panel-lite"><span class="kicker">NORTHERN OBSERVATORY</span><strong>Gate approach</strong><small id="signal-stability">Signal stability 72%</small></div>
+<div class="quest-hud panel-lite"><span class="kicker">TRACKED OBJECTIVE</span><strong id="hud-objective">Observatory Gate</strong><small id="hud-distance">340 m · Reach the core</small></div>
+<button class="interaction-prompt" id="calibrate-beacon" type="button"><kbd>E</kbd><span id="calibrate-label">Calibrate navigation beacon</span></button>
+<div class="hud-bottom">
+<div class="hud-indicator"><span class="hud-label">HP</span><div class="progress"><span style="width:82%"></span></div><strong>820</strong></div>
+<div class="hud-indicator critical"><span class="hud-label">ENERGY</span><div class="progress danger"><span style="width:18%"></span></div><strong>18%</strong></div>
+<div aria-label="Game interface" class="quick-nav">
+<button class="nav-item" data-view="inventory"><span>I</span>Inventory</button>
+<button class="nav-item" data-view="quests"><span>Q</span>Quest Log</button>
+<button class="nav-item" data-view="dialog"><span>F</span>Talk</button>
+<button class="nav-item" data-view="settings"><span>Esc</span>Pause</button>
+</div>
+</div>
+<div class="toast" hidden="" id="toast"></div>
+</section>
+<section class="view overlay-view" hidden="" id="view-load">
+<div class="overlay-panel panel save-panel">
+<header class="screen-head"><div><span class="kicker">PROFILE ARCHIVE</span><h1>Load expedition</h1></div><button aria-label="Back" class="close-button" data-view="menu">×</button></header>
+<button class="save-slot selected" data-load-profile="1"><div><strong>Glass Meridian</strong><small>Cycle 41 · Observatory Gate</small></div><span>12h 48m</span></button>
+<button class="save-slot" data-load-profile="2"><div><strong>Verdant Reach</strong><small>Cycle 27 · Eastern Gate</small></div><span>7h 16m</span></button>
+<button class="save-slot" data-load-profile="3"><div><strong>New archive slot</strong><small>No expedition data</small></div><span>—</span></button>
+</div>
+</section>
+<section class="view overlay-view" hidden="" id="view-new">
+<div class="overlay-panel panel confirm-panel">
+<span class="kicker">NEW EXPEDITION</span><h1>Start a new cycle?</h1>
+<p>A new model-case state will be created. Existing profile data is not modified in this demonstration.</p>
+<div class="button-row"><button class="action selected" id="start-new">Begin expedition</button><button class="action ghost" data-view="menu">Cancel</button></div>
+</div>
+</section>
+<section class="view overlay-view" hidden="" id="view-inventory">
+<div class="overlay-panel panel inventory-window">
+<header class="screen-head"><div><span class="kicker">EQUIPMENT</span><h1>Inventory</h1></div><div class="screen-actions"><div class="currency">✦ 12,480</div><button aria-label="Back" class="close-button" data-view="gameplay">×</button></div></header>
+<div class="inventory-layout">
+<div class="inventory-pane"><h3>Relics</h3><div class="slot-grid">
+<button class="inventory-slot selected" data-item="solar"><span class="relic r1"></span><small>Solar Prism</small></button>
+<button class="inventory-slot" data-item="echo"><span class="relic r2"></span><small>Echo Lens</small></button>
+<button class="inventory-slot" data-item="void"><span class="relic r3"></span><small>Void Key</small></button>
+<button class="inventory-slot locked" disabled=""><span class="lock">◇</span><small>Locked</small></button>
+<button class="inventory-slot" data-item="thread"><span class="relic r4"></span><small>Star Thread</small></button>
+<button class="inventory-slot" data-item="sigil"><span class="relic r5"></span><small>North Sigil</small></button>
+</div></div>
+<div class="item-detail">
+<span class="status-badge status-warning" id="item-rarity">RARE RELIC</span>
+<div class="big-relic r1" id="item-art"></div>
+<h2 id="item-name">Solar Prism</h2>
+<p id="item-description">Amplifies celestial resonance after a perfect evade.</p>
+<div class="stat"><span id="item-stat-a-label">Resonance</span><strong id="item-stat-a">+18%</strong></div>
+<div class="stat"><span id="item-stat-b-label">Cooldown</span><strong id="item-stat-b">12s</strong></div>
+<button class="action selected" id="equip-button">Equip</button>
+</div>
+</div>
+</div>
+</section>
+<section class="view overlay-view" hidden="" id="view-quests">
+<div class="overlay-panel panel quest-window">
+<header class="screen-head"><div><span class="kicker">NAVIGATION</span><h1>Quest Log</h1></div><div class="screen-actions"><span class="status-badge status-info">3 ACTIVE</span><button aria-label="Back" class="close-button" data-view="gameplay">×</button></div></header>
+<div class="quest-layout">
+<div class="quest-list">
+<button class="quest active" data-quest="meridian"><span>MAIN</span><strong>The Glass Meridian</strong><small>Reach the northern observatory</small></button>
+<button class="quest" data-quest="signals"><span>SIDE</span><strong>Lost Signals</strong><small>Recover 3 archive fragments</small></button>
+<button class="quest" data-quest="bloom"><span>SIDE</span><strong>Prismatic Bloom</strong><small>Speak with Iona</small></button>
+</div>
+<div class="quest-detail"><span class="kicker" id="quest-type">MAIN QUEST</span><h2 id="quest-name">The Glass Meridian</h2><p id="quest-description">The unstable route has opened beyond the northern observatory. Calibrate the gate before the current cycle ends.</p><div class="objective"><span id="quest-progress-label">Gate calibration</span><strong id="quest-progress-value">72%</strong></div><div class="progress"><span id="quest-progress-bar" style="width:72%"></span></div><div class="objective-list" id="quest-objectives"><span class="done">✓ Synchronize three beacons</span><span>○ Reach the observatory core</span></div><button class="action selected" id="track-quest">Track quest</button></div>
+</div>
+</div>
+</section>
+<section class="view dialog-scene" hidden="" id="view-dialog">
+<div aria-hidden="true" class="scene-character"><div class="character-shape"></div></div>
+<div class="dialog panel"><div class="dialog-head"><span class="kicker">LYRA VENN</span><button aria-label="Leave dialog" class="close-button" data-view="gameplay">×</button></div><p id="dialog-line">“The route is stable for now. If the prism starts pulsing red, do not cross the gate.”</p><div class="dialog-actions" id="dialog-actions"><button class="action selected" data-dialog-choice="prism">Ask about the prism</button><button class="action ghost" data-dialog-choice="continue">Continue</button></div></div>
+</section>
+<section class="view overlay-view" hidden="" id="view-settings">
+<div class="overlay-panel panel settings-window">
+<header class="screen-head"><div><span class="kicker">PAUSE MENU</span><h1>Settings</h1></div><button aria-label="Back" class="close-button" data-view="gameplay">×</button></header>
+<div class="settings-grid">
+<div class="settings-list">
+<div class="setting"><div><strong>Interface scale</strong><small>Adjust HUD size</small></div><div class="stepper"><button aria-label="Decrease interface scale" id="scale-down">−</button><span id="scale-value">100%</span><button aria-label="Increase interface scale" id="scale-up">+</button></div></div>
+<div class="setting"><div><strong>Controller vibration</strong><small>Gameplay feedback</small></div><button aria-label="Controller vibration" aria-pressed="true" class="toggle on" id="vibration-toggle"></button></div>
+<div class="setting"><div><strong>High contrast indicators</strong><small>Additional status distinction</small></div><button aria-label="High contrast indicators" aria-pressed="false" class="toggle" id="contrast-toggle"></button></div>
+</div>
+<div class="adapter-note"><span class="kicker">PLATFORM OVERRIDE</span><h2>Game adapter</h2><p>Controller selection, HUD critical feedback and inventory states extend the shared core without changing the web implementation.</p><div class="critical-demo hud-indicator"><strong>LOW ENERGY</strong><span>18%</span></div><button class="action ghost trace-open" data-view="trace">Design system trace</button><button class="action ghost reset-demo" id="reset-demo" type="button">Reset demo state</button></div>
+</div>
+</div>
+</section>
+<section class="view overlay-view" hidden="" id="view-trace">
+<div class="overlay-panel panel trace-window">
+<header class="screen-head"><div><span class="kicker">CROSS-RUNTIME COMPARISON</span><h1>Design system trace</h1></div><button aria-label="Back" class="close-button" data-view="settings">×</button></header>
+<p class="trace-intro">The browser preview and the native Godot demo render the same design roles through different presentation technologies. These three reference points are intentionally comparable in both runtimes.</p>
+<div class="trace-grid">
+<article class="trace-card" data-runtime-comparison="action">
+<span class="kicker">SHARED CONTRACT</span><h2>Action</h2>
+<p>Shared component roles remain stable; the game adapter adds selected/controller focus behavior.</p>
+<button class="action selected trace-action" id="trace-action-demo" type="button">Primary action</button>
+<code>component.action.background.default</code><code>component.action.radius</code><code>game.focus.controller.ringColor</code>
+</article>
+<article class="trace-card" data-runtime-comparison="inventory-slot">
+<span class="kicker">GAME EXTENSION</span><h2>InventorySlot</h2>
+<p>The component exists only in the game adapter while reusing shared surface, border and spacing semantics.</p>
+<div class="trace-slots"><button class="inventory-slot selected" data-trace-slot="solar" type="button"><span class="relic r1"></span><small>Solar Prism</small></button><button class="inventory-slot" data-trace-slot="echo" type="button"><span class="relic r2"></span><small>Echo Lens</small></button></div>
+<code>component.inventorySlot.background</code><code>component.inventorySlot.border.selected</code>
+</article>
+<article class="trace-card" data-runtime-comparison="critical-hud">
+<span class="kicker">PLATFORM OVERRIDE</span><h2>Critical HUD</h2>
+<p>The danger meaning is shared, while pulse timing and scale belong to the game adapter.</p>
+<div class="trace-critical"><div class="progress danger"><span style="width:18%"></span></div><strong>18%</strong></div>
+<code>game.hud.critical.color</code><code>game.hud.critical.pulseDuration</code><code>game.hud.critical.pulseScale</code>
+</article>
+</div>
+<p class="trace-footer">The corresponding Godot screen uses native Godot Controls, not HTML/CSS, while reading the same generated game token output.</p>
+<button class="action ghost" data-view="settings">Back to settings</button>
+</div>
+</section>
+
+</main>
+</div>
+</div>
+<script src="../../shared/i18n.js"></script><script src="app.js"></script>
+</body>
+</html>
