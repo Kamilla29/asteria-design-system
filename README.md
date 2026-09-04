@@ -1,5 +1,7 @@
 # Asteria Cross-Platform Design System
 
+[![CI](https://github.com/Kamilla29/asteria-design-system/actions/workflows/ci.yml/badge.svg)](https://github.com/Kamilla29/asteria-design-system/actions/workflows/ci.yml)
+
 A reference implementation of a **shared design-token architecture for web and game user interfaces**. The project explores how one semantic design core can be transformed into platform-specific representations without forcing web and game UI to look or behave identically.
 
 
@@ -186,7 +188,7 @@ Some documentation remains in Czech because the project originated as the practi
 
 The first complete version of this project was developed as the practical part of my bachelor's thesis. The repository is now maintained as an independent engineering portfolio project, with the academic implementation serving as a tested baseline rather than being presented as commercial experience.
 
-Planned portfolio evolution includes a React/TypeScript consumer layer, a reusable component package and additional frontend component testing while preserving the existing token and Godot pipeline.
+In the portfolio, Asteria serves as the architecture-focused case: it demonstrates token modelling, platform boundaries, build tooling, localization, validation and cross-runtime integration. It complements product-oriented React work without being presented as a React application.
 
 ---
 
