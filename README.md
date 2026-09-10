@@ -193,4 +193,4 @@ In the portfolio, Asteria serves as the architecture-focused case: it demonstrat
 ---
 
 **Kamilla Kuanysheva**  
-React Developer · TypeScript · QA Automation
+React Developer · TypeScript · Frontend Engineering
