@@ -2,8 +2,17 @@
 
 [![CI](https://github.com/Kamilla29/asteria-design-system/actions/workflows/ci.yml/badge.svg)](https://github.com/Kamilla29/asteria-design-system/actions/workflows/ci.yml)
 
-A reference implementation of a **shared design-token architecture for web and game user interfaces**. The project explores how one semantic design core can be transformed into platform-specific representations without forcing web and game UI to look or behave identically.
+An architecture-focused implementation of a **shared design-token system for web and game user interfaces**, developed from the practical part of my bachelor's thesis and maintained as an engineering portfolio project.
 
+The core problem is not visual styling alone: the project models configuration, transformation, validation and runtime integration across different platforms while keeping shared semantics separate from platform-specific behavior.
+
+## Recruiter snapshot
+
+- **Architecture:** primitives → semantic tokens → component contracts → platform adapters.
+- **Data/configuration:** JSON token sources, aliases, generated outputs and validation.
+- **Integration:** browser UI plus a native Godot 4 adapter consuming generated game tokens.
+- **Tooling:** Node.js build/validation scripts, localization checks and GitHub Actions CI.
+- **Role relevance:** Frontend/Software Developer, design systems, platform integration and tooling-oriented roles.
 
 ## What this project demonstrates
 
@@ -193,4 +202,4 @@ In the portfolio, Asteria serves as the architecture-focused case: it demonstrat
 ---
 
 **Kamilla Kuanysheva**  
-React Developer · TypeScript · Frontend Engineering
+Junior Software Developer · React · APIs · Testing
